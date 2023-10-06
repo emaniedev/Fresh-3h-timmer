@@ -1,41 +1,54 @@
-// Obtén el elemento del contador y el botón de reset
-        var contadorElement = document.getElementById("contador");
-                var botonReset = document.getElementById("botonReset");
+var contadorElement = document.getElementById("contador");
 
-                        // Inicializa el tiempo en 3 horas
-                                var tiempoRestante = 3 * 60 * 60; // 3 horas en segundos
+// Obtiene la hora actual
+var horaActual = new Date();
+var minutosActuales = horaActual.getMinutes();
+var segundosActuales = horaActual.getSeconds();
 
-                                        // Función para actualizar el contador
-                                                function actualizarContador() {
-                                                            var horas = Math.floor(tiempoRestante / 3600);
-                                                                        var minutos = Math.floor((tiempoRestante % 3600) / 60);
-                                                                                    var segundos = tiempoRestante % 60;
+// Calcula el tiempo restante hasta la próxima hora múltiplo de 3
+var minutosRestantes = 60 - minutosActuales;
+var segundosRestantes = 60 - segundosActuales;
+var tiempoRestante = (minutosRestantes * 60 + segundosRestantes) % (3 * 60);
 
-                                                                                                // Formatea el tiempo en HH:MM:SS
-                                                                                                            var tiempoFormateado = horas.toString().padStart(2, "0") + ":" +
-                                                                                                                                                minutos.toString().padStart(2, "0") + ":" +
-                                                                                                                                                                                    segundos.toString().padStart(2, "0");
+// Calcula la hora objetivo
+var horaObjetivo = new Date();
+horaObjetivo.setHours(horaObjetivo.getHours() + Math.floor(tiempoRestante / 3600));
+horaObjetivo.setMinutes(horaObjetivo.getMinutes() + Math.floor((tiempoRestante % 3600) / 60));
+horaObjetivo.setSeconds(horaObjetivo.getSeconds() + (tiempoRestante % 60));
 
-                                                                                                                                                                                                contadorElement.textContent = tiempoFormateado;
-                                                                                                                                                                                                        }
+// Función para formatear una fecha y hora
+function formatearFechaYHora(fecha) {
+        var fechaFormateada = fecha.toLocaleDateString();
+        var horaFormateada = fecha.toLocaleTimeString();
+        return fechaFormateada + ' ' + horaFormateada;
+}
 
-                                                                                                                                                                                                                // Llama a la función para mostrar el tiempo inicial
-                                                                                                                                                                                                                        actualizarContador();
+// Función para actualizar el contador
+function actualizarContador() {
+        var horas = Math.floor(tiempoRestante / 3600);
+        var minutos = Math.floor((tiempoRestante % 3600) / 60);
+        var segundos = tiempoRestante % 60;
 
-                                                                                                                                                                                                                                // Cada segundo, actualiza el contador y reduce el tiempo restante
-                                                                                                                                                                                                                                        var intervalo = setInterval(function() {
-                                                                                                                                                                                                                                                    tiempoRestante--;
-                                                                                                                                                                                                                                                                actualizarContador();
+        var tiempoFormateado = horas.toString().padStart(2, "0") + ":" +
+                minutos.toString().padStart(2, "0") + ":" +
+                segundos.toString().padStart(2, "0");
 
-                                                                                                                                                                                                                                                                            // Si el tiempo llega a cero, detén el contador
-                                                                                                                                                                                                                                                                                        if (tiempoRestante <= 0) {
-                                                                                                                                                                                                                                                                                                        clearInterval(intervalo);
-                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                            }, 1000);
+        var horaObjetivoFormateada = formatearFechaYHora(horaObjetivo);
 
-                                                                                                                                                                                                                                                                                                                                    // Agrega un event listener al botón de reset
-                                                                                                                                                                                                                                                                                                                                            botonReset.addEventListener("click", function() {
-                                                                                                                                                                                                                                                                                                                                                        // Reinicia el tiempo a 3 horas y actualiza el contador
-                                                                                                                                                                                                                                                                                                                                                                    tiempoRestante = 3 * 60 * 60;
-                                                                                                                                                                                                                                                                                                                                                                                actualizarContador();
-                                                                                                                                                                                                                                                                                                                                                                                        });
+        contadorElement.textContent = `Hora Objetivo: ${horaObjetivoFormateada} - Tiempo Restante: ${tiempoFormateado}`;
+}
+
+// Actualiza el contador inicial
+actualizarContador();
+
+// Inicia la cuenta regresiva
+var intervalo = setInterval(function () {
+        tiempoRestante--;
+
+        if (tiempoRestante < 0) {
+                clearInterval(intervalo);
+                contadorElement.textContent = "¡Tiempo cumplido!";
+        } else {
+                actualizarContador();
+        }
+}, 1000);
