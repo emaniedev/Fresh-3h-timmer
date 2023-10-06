@@ -2,6 +2,7 @@ var contadorElement = document.getElementById("contador");
 
 // Obtiene la hora actual
 var horaActual = new Date();
+var horaActualEnHoras = horaActual.getHours();
 var minutosActuales = horaActual.getMinutes();
 var segundosActuales = horaActual.getSeconds();
 
@@ -20,6 +21,7 @@ var tiempoRestante = ((horaObjetivoEnHoras - horaActualEnHoras) * 3600) -
 // Calcula la hora objetivo
 var horaObjetivo = new Date();
 horaObjetivo.setHours(horaObjetivoEnHoras, 0, 0, 0);
+
 // Función para formatear una fecha y hora
 function formatearFechaYHora(fecha) {
         var fechaFormateada = fecha.toLocaleDateString();
