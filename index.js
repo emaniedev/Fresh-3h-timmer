@@ -5,17 +5,21 @@ var horaActual = new Date();
 var minutosActuales = horaActual.getMinutes();
 var segundosActuales = horaActual.getSeconds();
 
-// Calcula el tiempo restante hasta la próxima hora múltiplo de 3
-var minutosRestantes = 60 - minutosActuales;
-var segundosRestantes = 60 - segundosActuales;
-var tiempoRestante = (minutosRestantes * 60 + segundosRestantes) % (3 * 60);
+// Calcula la próxima hora múltiplo de 3
+var horaObjetivoEnHoras = (Math.floor(horaActualEnHoras / 3) + 1) * 3;
+
+// Ajusta la hora objetivo si ya pasó la próxima hora múltiplo de 3
+if (horaActualEnHoras >= horaObjetivoEnHoras) {
+        horaObjetivoEnHoras += 3;
+}
+
+// Calcula el tiempo restante en segundos
+var tiempoRestante = ((horaObjetivoEnHoras - horaActualEnHoras) * 3600) -
+        (minutosActuales * 60) - segundosActuales;
 
 // Calcula la hora objetivo
 var horaObjetivo = new Date();
-horaObjetivo.setHours(horaObjetivo.getHours() + Math.floor(tiempoRestante / 3600));
-horaObjetivo.setMinutes(horaObjetivo.getMinutes() + Math.floor((tiempoRestante % 3600) / 60));
-horaObjetivo.setSeconds(horaObjetivo.getSeconds() + (tiempoRestante % 60));
-
+horaObjetivo.setHours(horaObjetivoEnHoras, 0, 0, 0);
 // Función para formatear una fecha y hora
 function formatearFechaYHora(fecha) {
         var fechaFormateada = fecha.toLocaleDateString();
