@@ -1,4 +1,4 @@
-var contadorElement = document.getElementById("contador");
+var contadorElement = document.getElementById("app");
 
 // Obtiene la hora actual
 var horaActual = new Date();
