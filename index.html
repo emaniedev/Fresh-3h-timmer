@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Cuenta Regresiva</title>
-	</head>
-	<body>
-	    <h1>Cuenta Regresiva</h1>
-		    <p id="contador">calculando..</p>
-			    <button id="botonReset">Resetear</button>
-				
-    <h1>Holi</h1>
-		<div id="app"></div>
-    <script src="index.js"></script>
-	</body>
+	<title>Cuenta Regresiva</title>
+</head>
+
+<body>
+	<h1>Cuenta Regresiva</h1>
+	<p id="contador">Calculando...</p>
+
+	<label for="hora">Hora (0-23): </label>
+	<input type="number" id="hora" min="0" max="23" step="1" />
+	<label for="minutos">Minutos (0-59): </label>
+	<input type="number" id="minutos" min="0" max="59" step="1" />
+	<button id="calcular">Calcular Hora Objetivo</button>
+
+	<script src="index.js"></script>
+</body>
+
 </html>

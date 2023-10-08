@@ -1,35 +1,17 @@
-var contadorElement = document.getElementById("app");
+var contadorElement = document.getElementById("contador");
+var horaInput = document.getElementById("hora");
+var minutosInput = document.getElementById("minutos");
+var calcularButton = document.getElementById("calcular");
 
-// Obtiene la hora actual
-var horaActual = new Date();
-var horaActualEnHoras = horaActual.getHours();
-var minutosActuales = horaActual.getMinutes();
-var segundosActuales = horaActual.getSeconds();
+var tiempoRestante = 0;
+var horaObjetivo = null;
 
-// Calcula la próxima hora múltiplo de 3
-var horaObjetivoEnHoras = (Math.floor(horaActualEnHoras / 3) + 1) * 3;
-
-// Ajusta la hora objetivo si ya pasó la próxima hora múltiplo de 3
-if (horaActualEnHoras >= horaObjetivoEnHoras) {
-        horaObjetivoEnHoras += 3;
-}
-
-// Calcula el tiempo restante en segundos
-var tiempoRestante = ((horaObjetivoEnHoras - horaActualEnHoras) * 3600) -
-        (minutosActuales * 60) - segundosActuales;
-
-// Calcula la hora objetivo
-var horaObjetivo = new Date();
-horaObjetivo.setHours(horaObjetivoEnHoras, 0, 0, 0);
-
-// Función para formatear una fecha y hora
 function formatearFechaYHora(fecha) {
         var fechaFormateada = fecha.toLocaleDateString();
         var horaFormateada = fecha.toLocaleTimeString();
         return fechaFormateada + ' ' + horaFormateada;
 }
 
-// Función para actualizar el contador
 function actualizarContador() {
         var horas = Math.floor(tiempoRestante / 3600);
         var minutos = Math.floor((tiempoRestante % 3600) / 60);
@@ -44,17 +26,27 @@ function actualizarContador() {
         contadorElement.textContent = `Hora Objetivo: ${horaObjetivoFormateada} - Tiempo Restante: ${tiempoFormateado}`;
 }
 
-// Actualiza el contador inicial
-actualizarContador();
+function calcularHoraObjetivo() {
+        var horaSeleccionada = parseInt(horaInput.value, 10);
+        var minutosSeleccionados = parseInt(minutosInput.value, 10);
 
-// Inicia la cuenta regresiva
-var intervalo = setInterval(function () {
-        tiempoRestante--;
-
-        if (tiempoRestante < 0) {
-                clearInterval(intervalo);
-                contadorElement.textContent = "¡Tiempo cumplido!";
-        } else {
-                actualizarContador();
+        if (isNaN(horaSeleccionada) || isNaN(minutosSeleccionados) ||
+                horaSeleccionada < 0 || horaSeleccionada > 23 ||
+                minutosSeleccionados < 0 || minutosSeleccionados > 59) {
+                alert("Por favor, ingrese valores válidos para la hora y los minutos.");
+                return;
         }
-}, 1000);
+
+        var horaActual = new Date();
+        horaActual.setHours(horaSeleccionada, minutosSeleccionados, 0, 0);
+
+        horaObjetivo = horaActual;
+
+        // Calcula el tiempo restante en segundos
+        var tiempoRestanteEnSegundos = Math.floor((horaActual - new Date()) / 1000);
+        tiempoRestante = Math.max(tiempoRestanteEnSegundos, 0);
+
+        actualizarContador();
+}
+
+calcularButton.addEventListener("click", calcularHoraObjetivo);
